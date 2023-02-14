@@ -1,7 +1,7 @@
 $(async function () {
     var respuesta = await $.ajax({
         type: "GET",
-        url: "api/mensaje/all/"+indicativo,
+        url: "api/mensaje/all/" + indicativo,
         success: function (response) {
             if (response.ok) {
                 return response;
@@ -32,5 +32,9 @@ $(async function () {
             ]
         }
     );
+
+    $('#tablaMensajes tr').click(function (ev) {
+        console.log(ev);
+    })
 
 });
