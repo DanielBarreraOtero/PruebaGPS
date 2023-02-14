@@ -56,28 +56,43 @@ class ParticipanteRepository extends ServiceEntityRepository implements Password
         $this->save($user, true);
     }
 
-//    /**
-//     * @return Participante[] Returns an array of Participante objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findAllJueces()
+    {
+        $data =  $this->createQueryBuilder('p')
+            ->select('p.indicativo')
+            ->where('p.roles = \'["ROLE_JUEZ"]\'')
+            ->getQuery()
+            ->getResult();
 
-//    public function findOneBySomeField($value): ?Participante
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        foreach ($data as $participante) {
+            $indicativos[$participante['indicativo']] = $participante['indicativo'];
+        }
+
+        return $indicativos;
+    }
+
+    //    /**
+    //     * @return Participante[] Returns an array of Participante objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('p.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Participante
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

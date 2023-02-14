@@ -14,27 +14,31 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/api', name: 'api_mensaje')]
-class ApiMensajeControllerPhpController extends AbstractController
+class ApiMensajeController extends AbstractController
 {
     #[Route('/mensaje/{id}', name: 'get_mensaje', methods: 'GET')]
-    public function getMensaje(MensajeRepository $repoMensj, int $id = null): Response
+    public function getMensaje(MensajeRepository $repoMensj, int $id): Response
     {
-        if ($id !== null) {
-            $mensaje = $repoMensj->find($id);
+        $mensaje = $repoMensj->find($id);
 
-            if ($mensaje === null) {
-                return $this->json(['ok' => false, 'message' => 'no se ha podido encontrar el mensaje ' . $id], 404);
-            }
-
-            $mensajes[] = $mensaje;
-        } else {
-            $mensajes = $repoMensj->findAll();
-
-            if (!isset($mensajes[0])) {
-                return $this->json(['ok' => false, 'message' => 'no se han encontrado mensajes'], 404);
-            }
+        if ($mensaje === null) {
+            return $this->json(['ok' => false, 'message' => 'no se ha podido encontrar el mensaje ' . $id], 404);
         }
 
+        $mensajes[] = $mensaje;
+
+        return $this->json(['ok' => true, 'mensajes' => $mensajes], 200);
+    }
+
+    #[Route('/mensaje/all/{indicativo}', name: 'get_mensajes', methods: 'GET')]
+    public function getMensajes(MensajeRepository $repoMensj, string $indicativo): Response
+    {
+
+        $mensajes = $repoMensj->findForJuez($indicativo);
+
+        if (!isset($mensajes[0])) {
+            return $this->json(['ok' => false, 'message' => 'no se han encontrado mensajes'], 404);
+        }
 
         return $this->json(['ok' => true, 'mensajes' => $mensajes], 200);
     }

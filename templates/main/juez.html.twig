@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<script>
+    var indicativo = "{{ app.user.indicativo }}";
+</script>
+<script src="js/juez.js"></script>
+
+
+<table id="tablaMensajes">
+    <thead>
+        <tr>
+            <th>banda</th>
+            <th>modo</th>
+            <th>hora</th>
+            <th>participante</th>
+            <th>validado</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+
+
+
+{% endblock %}

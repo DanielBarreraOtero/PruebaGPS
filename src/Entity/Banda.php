@@ -6,9 +6,11 @@ use App\Repository\BandaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
+use stdClass;
 
 #[ORM\Entity(repositoryClass: BandaRepository::class)]
-class Banda
+class Banda implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -116,5 +118,18 @@ class Banda
         }
 
         return $this;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        $std = new stdClass();
+
+        $std->id = $this->id;
+        $std->nombre = $this->nombre;
+        $std->rangoMax = $this->rangoMax;
+        $std->rangoMin = $this->rangoMin;
+        $std->distancia = $this->distancia;
+
+        return $std;
     }
 }

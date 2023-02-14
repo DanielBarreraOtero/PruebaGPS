@@ -6,9 +6,11 @@ use App\Repository\ModoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
+use stdClass;
 
 #[ORM\Entity(repositoryClass: ModoRepository::class)]
-class Modo
+class Modo implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -71,5 +73,15 @@ class Modo
         }
 
         return $this;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        $std = new stdClass();
+
+        $std->id = $this->id;
+        $std->nombre = $this->nombre;
+
+        return $std;
     }
 }

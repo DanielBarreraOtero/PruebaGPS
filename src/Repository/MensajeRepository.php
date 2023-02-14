@@ -39,6 +39,14 @@ class MensajeRepository extends ServiceEntityRepository
         }
     }
 
+    public function findForJuez(string $indicativo)
+    {
+        return $this->createQueryBuilder('m')
+            ->where("m.indicativoJuez = '$indicativo'")
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Mensaje[] Returns an array of Mensaje objects
 //     */

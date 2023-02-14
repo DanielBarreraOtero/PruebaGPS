@@ -7,13 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
+use stdClass;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: ParticipanteRepository::class)]
 #[UniqueEntity(fields: ['indicativo'], message: 'Ya existe una cuenta con este indicativo')]
-class Participante implements UserInterface, PasswordAuthenticatedUserInterface
+class Participante implements UserInterface, PasswordAuthenticatedUserInterface, JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -193,6 +195,17 @@ class Participante implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->mensajes;
     }
 
+    public function getMensajesNotLazy(): array
+    {
+        $misMensajes = [];
+
+        foreach ($this->mensajes as $mensaje) {
+            $misMensajes[] = $mensaje;
+        }
+
+        return $misMensajes;
+    }
+
     public function addMensaje(Mensaje $mensaje): self
     {
         if (!$this->mensajes->contains($mensaje)) {
@@ -213,5 +226,20 @@ class Participante implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        $std = new stdClass();
+
+        $std->id = $this->id;
+        $std->indicativo = $this->indicativo;
+        $std->roles = $this->roles;
+        $std->email = $this->email;
+        $std->nombre = $this->nombre;
+        $std->apellido1 = $this->apellido1;
+        $std->apellido1 = $this->apellido2;
+
+        return $std;
     }
 }

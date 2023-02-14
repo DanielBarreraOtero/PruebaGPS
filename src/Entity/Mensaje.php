@@ -119,9 +119,9 @@ class Mensaje implements JsonSerializable
         $std = new stdClass();
 
         $std->id = $this->id;
-        $std->banda_id = $this->banda->getId();
-        $std->modo_id = $this->modo->getId();
-        $std->participante_id = $this->participante->getId();
+        $std->banda = $this->banda;
+        $std->modo = $this->modo;
+        $std->participante = $this->participante;
         $std->hora = $this->hora;
         $std->validado = $this->validado;
         $std->indicativoJuez = $this->indicativoJuez;
