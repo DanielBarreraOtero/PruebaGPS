@@ -32,6 +32,9 @@ class Mensaje
     #[ORM\Column]
     private ?bool $validado = null;
 
+    #[ORM\Column(length: 6)]
+    private ?string $indicativoJuez = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,6 +96,18 @@ class Mensaje
     public function setValidado(bool $validado): self
     {
         $this->validado = $validado;
+
+        return $this;
+    }
+
+    public function getIndicativoJuez(): ?string
+    {
+        return $this->indicativoJuez;
+    }
+
+    public function setIndicativoJuez(string $indicativoJuez): self
+    {
+        $this->indicativoJuez = $indicativoJuez;
 
         return $this;
     }
