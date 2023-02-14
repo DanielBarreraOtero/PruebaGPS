@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ParticipanteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -42,6 +44,14 @@ class Participante implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $imagen = null;
+
+    #[ORM\OneToMany(mappedBy: 'participante', targetEntity: Mensaje::class)]
+    private Collection $mensajes;
+
+    public function __construct()
+    {
+        $this->mensajes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -169,6 +179,36 @@ class Participante implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImagen(?string $imagen): self
     {
         $this->imagen = $imagen;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mensaje>
+     */
+    public function getMensajes(): Collection
+    {
+        return $this->mensajes;
+    }
+
+    public function addMensaje(Mensaje $mensaje): self
+    {
+        if (!$this->mensajes->contains($mensaje)) {
+            $this->mensajes->add($mensaje);
+            $mensaje->setParticipante($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMensaje(Mensaje $mensaje): self
+    {
+        if ($this->mensajes->removeElement($mensaje)) {
+            // set the owning side to null (unless already changed)
+            if ($mensaje->getParticipante() === $this) {
+                $mensaje->setParticipante(null);
+            }
+        }
 
         return $this;
     }
