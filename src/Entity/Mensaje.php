@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Repository\MensajeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
+use stdClass;
 
 #[ORM\Entity(repositoryClass: MensajeRepository::class)]
-class Mensaje
+class Mensaje implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,7 +32,7 @@ class Mensaje
     private ?\DateTimeInterface $hora = null;
 
     #[ORM\Column]
-    private ?bool $validado = null;
+    private ?bool $validado = false;
 
     #[ORM\Column(length: 6)]
     private ?string $indicativoJuez = null;
@@ -110,5 +112,20 @@ class Mensaje
         $this->indicativoJuez = $indicativoJuez;
 
         return $this;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        $std = new stdClass();
+
+        $std->id = $this->id;
+        $std->banda_id = $this->banda->getId();
+        $std->modo_id = $this->modo->getId();
+        $std->participante_id = $this->participante->getId();
+        $std->hora = $this->hora;
+        $std->validado = $this->validado;
+        $std->indicativoJuez = $this->indicativoJuez;
+
+        return $std;
     }
 }
